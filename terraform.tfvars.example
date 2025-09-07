@@ -1,0 +1,141 @@
+# ================================================================
+# Immich Budget Family - Configuration Example
+# ================================================================
+# Copy this file to terraform.tfvars and customize
+# 
+# Estimated cost: €8-12/month for unlimited family photos
+#
+# Quick setup:
+#   cp terraform.tfvars.example terraform.tfvars
+#   nano terraform.tfvars
+#   terraform init
+#   terraform validate
+#   terraform plan
+#   terraform apply
+
+# ================================================================
+# REQUIRED: Hetzner Cloud API Token
+# ================================================================
+
+# Get from: https://console.hetzner.cloud/ -> Project -> Security -> API Tokens
+hcloud_token = "YOUR_HETZNER_CLOUD_TOKEN_HERE"
+
+# ================================================================
+# REQUIRED: SSH Access
+# ================================================================
+
+# Your SSH public key(s) for server access
+# Generate with: ssh-keygen -t ed25519
+# Then copy from: ~/.ssh/id_ed25519.pub
+ssh_public_keys = [
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI... your-key-here"
+]
+
+# ================================================================
+# REQUIRED: Backblaze B2 Setup
+# ================================================================
+# 
+# Create account at https://www.backblaze.com/ (free tier available)
+# Go to App Keys -> Add a New Application Key
+# Create a private bucket for your photos
+
+# Your B2 Application Key ID
+backblaze_application_key_id = "YOUR_B2_KEY_ID_HERE"
+
+# Your B2 Application Key (secret)
+backblaze_application_key = "YOUR_B2_SECRET_KEY_HERE"
+
+# Your B2 bucket name (must be globally unique)
+backblaze_bucket_name = "your-family-photos-2024"
+
+# ================================================================
+# OPTIONAL: Customization
+# ================================================================
+
+# Project name (used for resource naming)
+project_name = "immich-family"
+
+# Server location (nbg1=Nuremberg, fsn1=Falkenstein, hel1=Helsinki)
+server_location = "nbg1"
+
+# Domain name (optional - leave empty for IP access)
+domain_name = ""
+
+# Admin email for Immich
+admin_email = "admin@example.com"
+
+# SSH access restriction (IMPORTANT: Change from 0.0.0.0/0!)
+allowed_ssh_ips = ["0.0.0.0/0"]
+
+# Backblaze region (us-west-000 is cheapest)
+backblaze_region = "us-west-000"
+
+# ================================================================
+# SETUP INSTRUCTIONS
+# ================================================================
+
+# 1. HETZNER CLOUD SETUP:
+#    - Sign up at https://console.hetzner.cloud/
+#    - Create new project
+#    - Go to Security -> API Tokens -> Generate API Token
+#    - Copy token to hcloud_token above
+
+# 2. SSH KEY SETUP:
+#    - Generate key: ssh-keygen -t ed25519 -C "your-email@example.com"
+#    - Copy public key: cat ~/.ssh/id_ed25519.pub
+#    - Paste into ssh_public_keys above
+
+# 3. BACKBLAZE B2 SETUP:
+#    - Create account at https://www.backblaze.com/
+#    - Verify email and add payment method (free tier available)
+#    - Go to "Buckets" -> "Create a Bucket"
+#    - Choose "Private" bucket
+#    - Note bucket name
+#    - Go to "App Keys" -> "Add a New Application Key"  
+#    - Select your bucket and "Read and Write" permissions
+#    - Copy Key ID and Application Key
+
+# 4. SECURITY SETUP:
+#    - Find your IP: curl ifconfig.me
+#    - Replace 0.0.0.0/0 with your IP/32 in allowed_ssh_ips
+#    - Example: ["203.0.113.42/32"]
+
+# 5. DEPLOYMENT:
+#    - terraform init
+#    - terraform validate
+#    - terraform plan
+#    - terraform apply
+#    - Wait ~15 minutes for setup
+#    - Get admin password: terraform output -raw admin_password
+
+# ================================================================
+# COST BREAKDOWN
+# ================================================================
+
+# Monthly costs (EUR):
+# - CX21 Server (2 vCPU, 8GB RAM): €5.83
+# - 50GB Volume (system + cache): €2.40
+# - Backblaze B2 Storage:
+#   * First 10GB: FREE
+#   * Next 500GB: ~€2.50
+#   * Per additional 100GB: ~€0.50
+# 
+# Total for typical family (500GB photos): ~€10.73/month
+# 
+# Scales with usage:
+# - 100GB photos: ~€8.73/month
+# - 1TB photos: ~€13.23/month  
+# - 2TB photos: ~€18.23/month
+
+# Compare to alternatives:
+# - Google Photos (2TB): €120/year = €10/month (no AI features)
+# - iCloud+ (2TB): €9.99/month
+# - Dropbox (2TB): €11.99/month
+# 
+# Immich benefits:
+# ✅ Unlimited storage (pay only for usage)
+# ✅ AI-powered face detection & search
+# ✅ Full data ownership & privacy
+# ✅ Mobile apps with auto-backup
+# ✅ Family sharing & albums
+# ✅ No vendor lock-in

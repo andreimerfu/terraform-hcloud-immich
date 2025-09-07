@@ -1,0 +1,10 @@
+.terraform
+.serena/
+.claude
+
+.terraform.lock.hcl
+CLAUDE.md
+
+*.tfvars
+*.tfstate
+*.tfstate.backup
