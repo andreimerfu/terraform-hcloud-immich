@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install -g semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/git \
+            @semantic-release/github \
+            conventional-changelog-conventionalcommits
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Validate Terraform before release
+        run: |
+          terraform fmt -check -recursive
+          terraform init
+          terraform validate
+          cd examples/complete
+          terraform init
+          terraform validate
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: semantic-release
+
+  publish-registry:
+    name: Publish to Terraform Registry
+    runs-on: ubuntu-latest
+    needs: release
+    if: contains(github.event.head_commit.message, 'chore(release)')
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=${TAG#v}" >> $GITHUB_OUTPUT
+
+      - name: Create Release Archive
+        run: |
+          git archive --format=tar.gz --prefix=terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}/ \
+            ${{ steps.get_tag.outputs.tag }} > terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}.tar.gz
+
+      - name: Generate checksums
+        run: |
+          sha256sum terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}.tar.gz > checksums.txt
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_tag.outputs.tag }}
+          files: |
+            terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}.tar.gz
+            checksums.txt
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Terraform Registry
+        run: |
+          echo "🚀 Module version ${{ steps.get_tag.outputs.version }} is ready for Terraform Registry!"
+          echo "Registry will automatically detect the new tag and update the module."
+          echo "Visit https://registry.terraform.io/ to verify publication."

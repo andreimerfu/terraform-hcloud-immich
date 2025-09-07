@@ -1,0 +1,44 @@
+{
+  "name": "terraform-immich-hetzner",
+  "version": "0.0.0-development",
+  "description": "Terraform module for cost-effective Immich deployment on Hetzner Cloud with unlimited photo storage via Backblaze B2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/terraform-immich-hetzner.git"
+  },
+  "keywords": [
+    "terraform",
+    "module",
+    "immich",
+    "hetzner-cloud",
+    "backblaze-b2",
+    "juicefs",
+    "photos",
+    "self-hosted",
+    "infrastructure-as-code"
+  ],
+  "author": "Terraform Module Contributors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-org/terraform-immich-hetzner/issues"
+  },
+  "homepage": "https://github.com/your-org/terraform-immich-hetzner#readme",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
+    "semantic-release": "^22.0.12"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "*.tf",
+    "*.sh",
+    "examples/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
+}

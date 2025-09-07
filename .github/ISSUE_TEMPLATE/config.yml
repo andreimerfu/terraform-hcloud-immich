@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🤔 General Questions
+    url: https://github.com/your-org/terraform-immich-hetzner/discussions
+    about: Ask questions or discuss the module in GitHub Discussions
+  - name: 💬 Community Support
+    url: https://discord.gg/immich
+    about: Join the Immich Discord for community support
+  - name: 📚 Documentation
+    url: https://immich.app/docs
+    about: Check the official Immich documentation
+  - name: 🐛 Hetzner Cloud Issues
+    url: https://status.hetzner.com/
+    about: Check Hetzner Cloud status for infrastructure issues

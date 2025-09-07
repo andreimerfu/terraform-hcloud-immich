@@ -1,0 +1,75 @@
+version: 2
+
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      prefix-development: "ci"
+      include: "scope"
+
+  # Terraform provider dependencies
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "08:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "terraform"
+    commit-message:
+      prefix: "feat"
+      prefix-development: "feat"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for stable providers
+      - dependency-name: "hetznercloud/hcloud"
+        update-types: ["version-update:semver-major"]
+
+  # Terraform examples dependencies
+  - package-ecosystem: "terraform"
+    directory: "/examples/complete"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "examples"
+    commit-message:
+      prefix: "feat"
+      prefix-development: "feat"
+      include: "scope"
+
+  # NPM dependencies for semantic-release
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "08:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "build"
+      prefix-development: "build"
+      include: "scope"
+    ignore:
+      # Only update patch and minor versions
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

@@ -1,0 +1,221 @@
+name: Security
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Weekly on Mondays at 8 AM UTC
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  terraform-security:
+    name: Terraform Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.4
+        with:
+          sarif_file: tfsec-results.sarif
+
+      - name: Upload tfsec scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: tfsec-results.sarif
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov-results.sarif
+          soft_fail: true
+          skip_check: |
+            CKV_HETZNER_1,
+            CKV2_HETZNER_5
+
+      - name: Upload Checkov scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: checkov-results.sarif
+
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+
+      - name: Upload Trivy scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run GitLeaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          config: |
+            # GitLeaks configuration for Terraform modules
+            [extend]
+            useDefault = true
+            
+            [[rules]]
+            description = "Terraform variable files"
+            regex = '''(?i)(password|secret|token|key)\s*=\s*["'][^"']{8,}["']'''
+            file = '''\.tfvars$'''
+            
+            [[rules.allowlist]]
+            description = "Allow example files"
+            regex = '''terraform\.tfvars\.example$'''
+
+  supply-chain:
+    name: Supply Chain Security
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: SLSA Provenance Check
+        uses: slsa-framework/slsa-verifier@v2.4.1
+        with:
+          source-uri: "git+https://github.com/${{ github.repository }}"
+        continue-on-error: true
+
+      - name: Generate SLSA Provenance
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.7.0
+        with:
+          attestation-name: "terraform-module-attestation"
+          base64-subjects: "${{ needs.build.outputs.hashes }}"
+        continue-on-error: true
+
+  compliance-check:
+    name: Compliance & Best Practices
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Run Terrascan
+        uses: tenable/terrascan-action@main
+        with:
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'all'
+          only_warn: true
+          sarif_upload: true
+
+      - name: Terraform Module Standards Check
+        run: |
+          echo "🔍 Checking Terraform module standards..."
+          
+          # Check for required files
+          required_files=("main.tf" "variables.tf" "outputs.tf" "versions.tf" "README.md" "LICENSE")
+          for file in "${required_files[@]}"; do
+            if [[ -f "$file" ]]; then
+              echo "✅ $file exists"
+            else
+              echo "❌ $file is missing"
+              exit 1
+            fi
+          done
+          
+          # Check for examples
+          if [[ -d "examples" ]]; then
+            echo "✅ examples directory exists"
+            if [[ $(find examples -name "*.tf" | wc -l) -gt 0 ]]; then
+              echo "✅ Examples contain Terraform files"
+            else
+              echo "❌ Examples directory contains no Terraform files"
+              exit 1
+            fi
+          else
+            echo "❌ examples directory is missing"
+            exit 1
+          fi
+          
+          # Check version constraints
+          if grep -q "required_version" versions.tf; then
+            echo "✅ Terraform version constraint found"
+          else
+            echo "❌ Missing Terraform version constraint in versions.tf"
+            exit 1
+          fi
+          
+          # Check provider constraints
+          if grep -q "required_providers" versions.tf; then
+            echo "✅ Provider version constraints found"
+          else
+            echo "❌ Missing provider version constraints in versions.tf"
+            exit 1
+          fi
+          
+          echo "🎉 All compliance checks passed!"
+
+  security-report:
+    name: Security Report
+    runs-on: ubuntu-latest
+    needs: [terraform-security, dependency-scan, secret-scan, compliance-check]
+    if: always()
+    
+    steps:
+      - name: Generate Security Report
+        run: |
+          echo "# Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Terraform Security | ${{ needs.terraform-security.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Scan | ${{ needs.dependency-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret Scan | ${{ needs.secret-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Compliance Check | ${{ needs.compliance-check.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.terraform-security.result }}" == "success" && "${{ needs.dependency-scan.result }}" == "success" && "${{ needs.secret-scan.result }}" == "success" && "${{ needs.compliance-check.result }}" == "success" ]]; then
+            echo "✅ All security checks passed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some security checks failed. Please review the results above." >> $GITHUB_STEP_SUMMARY
+          fi

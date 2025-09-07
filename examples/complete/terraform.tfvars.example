@@ -1,0 +1,56 @@
+# ================================================================
+# Immich Family Photo Server - Example Configuration
+# ================================================================
+# Copy this file to terraform.tfvars and customize with your values
+# 
+# Estimated cost: €8-12/month for unlimited family photos
+
+# ================================================================
+# REQUIRED: Hetzner Cloud Configuration
+# ================================================================
+
+# Get from: https://console.hetzner.cloud/ -> Project -> Security -> API Tokens
+hcloud_token = "YOUR_HETZNER_CLOUD_TOKEN_HERE"
+
+# Your SSH public key(s) for server access
+# Generate with: ssh-keygen -t ed25519
+# Then copy from: ~/.ssh/id_ed25519.pub
+ssh_public_keys = [
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI... your-key-here"
+]
+
+# ================================================================
+# REQUIRED: Backblaze B2 Configuration
+# ================================================================
+# 
+# 1. Create account at https://www.backblaze.com/
+# 2. Create a PRIVATE bucket for your photos
+# 3. Generate Application Key with read/write access to your bucket
+
+backblaze_application_key_id = "YOUR_B2_KEY_ID_HERE"
+backblaze_application_key    = "YOUR_B2_SECRET_KEY_HERE"
+backblaze_bucket_name       = "your-family-photos-2024"
+
+# ================================================================
+# OPTIONAL: Customization
+# ================================================================
+
+# Project name (used for resource naming)
+project_name = "immich-family"
+
+# Server location (nbg1=Nuremberg, fsn1=Falkenstein, hel1=Helsinki)
+server_location = "nbg1"
+
+# Domain name (optional - enables HTTPS with Let's Encrypt)
+# Leave empty for IP-only access
+domain_name = ""
+
+# Admin email for Immich and SSL certificates
+admin_email = "admin@example.com"
+
+# SSH access restriction (SECURITY: Change from 0.0.0.0/0!)
+# Find your IP with: curl ifconfig.me
+allowed_ssh_ips = ["0.0.0.0/0"]
+
+# Backblaze region (us-west-000 is cheapest)
+backblaze_region = "us-west-000"

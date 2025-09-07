@@ -1,0 +1,237 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  terraform-validation:
+    name: Terraform Validation
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        terraform_version:
+          - 1.0.0
+          - 1.5.0
+          - latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ matrix.terraform_version }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init (Root Module)
+        run: terraform init
+
+      - name: Terraform Validate (Root Module)
+        run: terraform validate
+
+      - name: Terraform Init (Complete Example)
+        run: |
+          cd examples/complete
+          terraform init
+
+      - name: Terraform Validate (Complete Example)
+        run: |
+          cd examples/complete
+          terraform validate
+
+      - name: Run JuiceFS Integration Validation
+        run: ./validate-juicefs.sh
+
+  terraform-docs:
+    name: Terraform Docs Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Render Terraform docs inside README.md
+        uses: terraform-docs/gh-actions@v1.2.0
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: false
+          
+      - name: Check for docs changes
+        run: |
+          if git diff --quiet; then
+            echo "✅ Terraform docs are up to date"
+          else
+            echo "❌ Terraform docs are not up to date. Please run 'terraform-docs markdown table --output-file README.md .'"
+            echo "Changed files:"
+            git diff --name-only
+            exit 1
+          fi
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov-results.sarif
+          soft_fail: true
+
+      - name: Upload Checkov scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: checkov-results.sarif
+
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Run TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      - name: Init TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint --recursive
+
+      - name: Validate shell scripts
+        run: |
+          # Install shellcheck
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          
+          # Check all shell scripts
+          find . -name "*.sh" -type f -exec shellcheck {} +
+
+  examples-check:
+    name: Examples Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Validate all examples
+        run: |
+          for example in examples/*/; do
+            echo "🔍 Validating example: $example"
+            cd "$example"
+            terraform init
+            terraform validate
+            
+            # Check if terraform.tfvars.example exists and is properly formatted
+            if [ -f "terraform.tfvars.example" ]; then
+              echo "✅ Found terraform.tfvars.example in $example"
+            else
+              echo "❌ Missing terraform.tfvars.example in $example"
+              exit 1
+            fi
+            
+            cd - > /dev/null
+          done
+
+  integration-test:
+    name: Integration Test (Dry Run)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Create test terraform.tfvars
+        run: |
+          cd examples/complete
+          cat > terraform.tfvars << EOF
+          hcloud_token = "fake-token-for-testing"
+          ssh_public_keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFakeKeyForTesting test@example.com"]
+          backblaze_application_key_id = "fake-key-id"
+          backblaze_application_key = "fake-secret-key"
+          backblaze_bucket_name = "test-bucket-name"
+          project_name = "test-immich"
+          admin_email = "test@example.com"
+          EOF
+
+      - name: Terraform Plan (Dry Run)
+        run: |
+          cd examples/complete
+          terraform init
+          terraform plan
+        continue-on-error: true  # Expected to fail with fake credentials
+
+  changelog-check:
+    name: Changelog Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for CHANGELOG.md updates
+        run: |
+          # Skip changelog check for certain types of changes
+          if git diff --name-only origin/main...HEAD | grep -q "^\.github/\|^README\.md$\|^docs/"; then
+            echo "✅ Skipping changelog check for documentation/CI changes"
+            exit 0
+          fi
+          
+          # Check if CHANGELOG.md was modified
+          if git diff --name-only origin/main...HEAD | grep -q "CHANGELOG.md"; then
+            echo "✅ CHANGELOG.md has been updated"
+          else
+            echo "❌ Please update CHANGELOG.md with your changes"
+            echo "Add an entry under the 'Unreleased' section describing your changes"
+            exit 1
+          fi

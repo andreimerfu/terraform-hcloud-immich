@@ -12,24 +12,11 @@
 # - Total: ~€10.73/month
 # ================================================================
 
-terraform {
-  required_version = ">= 1.0"
-  required_providers {
-    hcloud = {
-      source  = "hetznercloud/hcloud"
-      version = "~> 1.50"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.1"
-    }
-  }
-}
+# ================================================================
+# Data Sources
+# ================================================================
 
-# Provider configuration
-provider "hcloud" {
-  token = var.hcloud_token
-}
+# No provider configuration in modules - handled by root module
 
 # ================================================================
 # Random password for initial admin user

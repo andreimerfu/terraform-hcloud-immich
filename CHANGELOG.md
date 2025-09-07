@@ -1,0 +1,64 @@
+# Changelog
+
+All notable changes to this Terraform module will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Initial Terraform module for Immich deployment on Hetzner Cloud
+- Unlimited photo storage via Backblaze B2 and JuiceFS integration
+- Automatic SSL certificates with Let's Encrypt
+- Complete CI/CD pipeline with GitHub Actions
+- Security scanning with tfsec, Checkov, and Trivy
+- Semantic versioning and automated releases
+- Comprehensive documentation and examples
+
+### Features
+- Cost-optimized deployment (€8-12/month for families)
+- AI-powered photo management with Immich
+- Mobile app support with automatic backup
+- Family sharing and album management
+- Complete infrastructure as code
+- Automated security updates and monitoring
+
+### Infrastructure
+- Hetzner Cloud CX22 server (2 vCPU, 8GB RAM)
+- 20GB SSD volume for system and database
+- Private networking with firewall protection
+- JuiceFS filesystem for unlimited B2 storage
+- Docker Compose service management
+- Systemd integration for auto-start services
+
+<!-- 
+## [1.0.0] - YYYY-MM-DD
+
+### Added
+- Initial release
+
+### Changed
+- 
+
+### Deprecated
+- 
+
+### Removed
+- 
+
+### Fixed
+- 
+
+### Security
+- 
+-->
+
+## [0.1.0] - Initial Development
+
+### Added
+- Basic Terraform module structure
+- Hetzner Cloud infrastructure resources
+- Immich application deployment
+- JuiceFS and Backblaze B2 integration
+- Documentation and examples
