@@ -35,7 +35,7 @@ fi
 
 # Check required environment variables are referenced
 echo "3. ✅ Checking environment variable usage..."
-for var in "BACKBLAZE_KEY_ID" "BACKBLAZE_KEY" "BACKBLAZE_BUCKET" "BACKBLAZE_REGION"; do
+for var in "S3_ACCESS_KEY_ID" "S3_SECRET_ACCESS_KEY" "S3_BUCKET_NAME" "S3_REGION" "S3_ENDPOINT"; do
     if grep -q "\$$var" setup.sh; then
         echo "   ✅ $var is used in setup script"
     else
@@ -58,11 +58,11 @@ echo "🎉 SUCCESS: JuiceFS integration is properly configured!"
 echo ""
 echo "📋 What's included:"
 echo "   • JuiceFS installation and configuration"
-echo "   • Backblaze B2 storage integration"  
+echo "   • S3-compatible storage integration (optimized for Backblaze B2)"
 echo "   • Systemd service for auto-mounting"
 echo "   • Docker containers using JuiceFS mount"
 echo "   • Health check with JuiceFS status"
-echo "   • Unlimited photo storage via B2"
+echo "   • Unlimited photo storage via S3-compatible storage"
 echo ""
 echo "💰 Cost: €8-12/month for unlimited family photos"
 echo "🚀 Ready for deployment with: terraform apply"

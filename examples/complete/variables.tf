@@ -13,20 +13,20 @@ variable "ssh_public_keys" {
   type        = list(string)
 }
 
-variable "backblaze_application_key_id" {
-  description = "Backblaze B2 Application Key ID"
+variable "s3_access_key_id" {
+  description = "S3-compatible storage Access Key ID (recommended: Backblaze B2)"
   type        = string
   sensitive   = true
 }
 
-variable "backblaze_application_key" {
-  description = "Backblaze B2 Application Key (secret)"
+variable "s3_secret_access_key" {
+  description = "S3-compatible storage Secret Access Key (recommended: Backblaze B2)"
   type        = string
   sensitive   = true
 }
 
-variable "backblaze_bucket_name" {
-  description = "Backblaze B2 bucket name for media storage"
+variable "s3_bucket_name" {
+  description = "S3-compatible storage bucket name for media storage (recommended: Backblaze B2 private bucket)"
   type        = string
 }
 
@@ -64,8 +64,14 @@ variable "allowed_ssh_ips" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "backblaze_region" {
-  description = "Backblaze B2 region"
+variable "s3_region" {
+  description = "S3-compatible storage region (recommended: 'us-west-000' for Backblaze B2)"
   type        = string
   default     = "us-west-000"
+}
+
+variable "s3_endpoint" {
+  description = "S3-compatible storage endpoint URL (leave empty for Backblaze B2 auto-detection)"
+  type        = string
+  default     = ""
 }

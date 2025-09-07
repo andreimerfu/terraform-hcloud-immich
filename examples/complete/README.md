@@ -6,7 +6,7 @@ This example demonstrates how to deploy a complete Immich family photo server wi
 
 - **Cost-Optimized**: €8-12/month for unlimited family photos
 - **Complete Google Photos Alternative**: AI-powered face detection, search, mobile apps
-- **Unlimited Storage**: Backblaze B2 integration via JuiceFS filesystem
+- **Unlimited Storage**: S3-compatible storage integration via JuiceFS filesystem (optimized for Backblaze B2)
 - **Automatic SSL**: Let's Encrypt certificates when domain is provided
 - **Family Ready**: Multi-user support with sharing and albums
 

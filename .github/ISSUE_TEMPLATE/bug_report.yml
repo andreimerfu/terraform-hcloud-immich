@@ -88,6 +88,15 @@ body:
       placeholder: |
         module "immich" {
           source = "..."
+          
+          # Required variables
+          hcloud_token         = "..."
+          ssh_public_keys      = ["..."]
+          s3_access_key_id     = "..."
+          s3_secret_access_key = "..."
+          s3_bucket_name       = "..."
+          
+          # Optional variables
           # Your configuration here
         }
 

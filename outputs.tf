@@ -29,11 +29,11 @@ output "admin_credentials" {
 output "cost_breakdown" {
   description = "Monthly cost breakdown in EUR"
   value = {
-    server_cx21       = "€5.83"
-    volume_50gb       = "€2.40" 
-    backblaze_500gb   = "~€2.50"
-    total_estimated   = "~€10.73"
-    note              = "Storage scales with usage (€0.005/GB/month)"
+    server_cx22       = "€5.83"
+    volume_20gb       = "€0.96" 
+    s3_storage_500gb  = "~€2.50"
+    total_estimated   = "~€9.29"
+    note              = "S3 storage scales with usage (Backblaze B2: €0.005/GB/month recommended)"
   }
 }
 

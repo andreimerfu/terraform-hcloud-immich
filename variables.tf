@@ -22,34 +22,34 @@ variable "ssh_public_keys" {
   }
 }
 
-variable "backblaze_application_key_id" {
-  description = "Backblaze B2 Application Key ID"
+variable "s3_access_key_id" {
+  description = "S3-compatible storage Access Key ID (recommended: Backblaze B2 Application Key ID for cost-effectiveness)"
   type        = string
   sensitive   = true
   
   validation {
-    condition     = length(var.backblaze_application_key_id) > 0
-    error_message = "Backblaze Application Key ID is required."
+    condition     = length(var.s3_access_key_id) > 0
+    error_message = "S3 Access Key ID is required."
   }
 }
 
-variable "backblaze_application_key" {
-  description = "Backblaze B2 Application Key (secret)"
+variable "s3_secret_access_key" {
+  description = "S3-compatible storage Secret Access Key (recommended: Backblaze B2 Application Key for cost-effectiveness)"
   type        = string
   sensitive   = true
   
   validation {
-    condition     = length(var.backblaze_application_key) > 0
-    error_message = "Backblaze Application Key is required."
+    condition     = length(var.s3_secret_access_key) > 0
+    error_message = "S3 Secret Access Key is required."
   }
 }
 
-variable "backblaze_bucket_name" {
-  description = "Backblaze B2 bucket name for media storage"
+variable "s3_bucket_name" {
+  description = "S3-compatible storage bucket name for media storage (recommended: Backblaze B2 private bucket)"
   type        = string
   
   validation {
-    condition     = can(regex("^[a-z0-9][a-z0-9-]*[a-z0-9]$", var.backblaze_bucket_name))
+    condition     = can(regex("^[a-z0-9][a-z0-9-]*[a-z0-9]$", var.s3_bucket_name))
     error_message = "Bucket name must contain only lowercase letters, numbers, and hyphens."
   }
 }
@@ -108,13 +108,19 @@ variable "allowed_ssh_ips" {
   }
 }
 
-variable "backblaze_region" {
-  description = "Backblaze B2 region"
+variable "s3_region" {
+  description = "S3-compatible storage region (recommended: 'us-west-000' for Backblaze B2 cost-effectiveness)"
   type        = string
   default     = "us-west-000"
   
   validation {
-    condition     = contains(["us-west-000", "us-west-001", "us-west-002", "us-west-004", "eu-central-003"], var.backblaze_region)
-    error_message = "Backblaze region must be one of the valid B2 regions."
+    condition     = length(var.s3_region) > 0
+    error_message = "S3 region must be specified."
   }
+}
+
+variable "s3_endpoint" {
+  description = "S3-compatible storage endpoint URL (recommended: leave empty for Backblaze B2 auto-detection, or specify custom S3 endpoint)"
+  type        = string
+  default     = ""
 }

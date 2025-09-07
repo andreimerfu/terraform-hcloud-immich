@@ -91,10 +91,10 @@ systemctl start docker
 log "Docker installation completed"
 
 # ================================================================
-# JuiceFS Installation and Setup for Backblaze B2 Storage
+# JuiceFS Installation and Setup for S3-Compatible Storage
 # ================================================================
 
-log "Installing JuiceFS for unlimited B2 storage"
+log "Installing JuiceFS for unlimited S3-compatible storage (optimized for Backblaze B2)"
 
 # Install JuiceFS
 curl -sSL https://d.juicefs.com/install | sh -
@@ -102,14 +102,25 @@ curl -sSL https://d.juicefs.com/install | sh -
 # Create JuiceFS cache directory
 mkdir -p /mnt/immich/cache/juicefs-cache
 
-# Format JuiceFS filesystem with Backblaze B2
-log "Formatting JuiceFS filesystem with Backblaze B2"
-export AWS_ACCESS_KEY_ID="$BACKBLAZE_KEY_ID"
-export AWS_SECRET_ACCESS_KEY="$BACKBLAZE_KEY"
+# Format JuiceFS filesystem with S3-compatible storage
+log "Formatting JuiceFS filesystem with S3-compatible storage"
+export AWS_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY"
+
+# Determine S3 endpoint - default to Backblaze B2 if not specified
+if [ -z "$S3_ENDPOINT" ]; then
+  # Auto-detect Backblaze B2 endpoint based on region
+  S3_BUCKET_URL="https://s3.$S3_REGION.backblazeb2.com/$S3_BUCKET_NAME"
+  log "Using Backblaze B2 endpoint: $S3_BUCKET_URL"
+else
+  # Use custom S3 endpoint
+  S3_BUCKET_URL="$S3_ENDPOINT/$S3_BUCKET_NAME"
+  log "Using custom S3 endpoint: $S3_BUCKET_URL"
+fi
 
 /usr/local/bin/juicefs format \
   --storage s3 \
-  --bucket "https://s3.$BACKBLAZE_REGION.backblazeb2.com/$BACKBLAZE_BUCKET" \
+  --bucket "$S3_BUCKET_URL" \
   sqlite3:///mnt/immich/cache/juicefs.db \
   immich-photos
 
@@ -136,8 +147,8 @@ Wants=network-online.target
 Type=forking
 User=root
 Group=root
-Environment=AWS_ACCESS_KEY_ID=$BACKBLAZE_KEY_ID
-Environment=AWS_SECRET_ACCESS_KEY=$BACKBLAZE_KEY
+Environment=AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY_ID
+Environment=AWS_SECRET_ACCESS_KEY=$S3_SECRET_ACCESS_KEY
 ExecStartPre=/bin/mkdir -p /mnt/immich/juicefs
 ExecStartPre=/bin/mkdir -p /mnt/immich/cache/juicefs-cache
 ExecStart=/usr/local/bin/juicefs mount sqlite3:///mnt/immich/cache/juicefs.db /mnt/immich/juicefs --cache-dir /mnt/immich/cache/juicefs-cache -d
@@ -157,7 +168,7 @@ systemctl enable juicefs
 mkdir -p /mnt/immich/juicefs/{library,upload,profile,thumbs,backups,encoded-video}
 chown -R 1001:1001 /mnt/immich/juicefs
 
-log "JuiceFS setup completed - unlimited photo storage ready"
+log "JuiceFS setup completed - unlimited photo storage ready via S3-compatible storage"
 
 # ================================================================
 # Immich Installation
@@ -275,14 +286,14 @@ systemctl daemon-reload
 systemctl enable immich
 systemctl start immich
 
-log "Immich installation completed with JuiceFS storage"
+log "Immich installation completed with JuiceFS S3-compatible storage"
 
-# Clean up old media files to save space (photos are now in JuiceFS/B2)
+# Clean up old media files to save space (photos are now in JuiceFS/S3)
 log "Cleaning up redundant local media files"
 if [ -d "/mnt/immich/media" ] && mountpoint -q /mnt/immich/juicefs; then
     rm -rf /mnt/immich/media/upload/* 2>/dev/null || true
     rm -rf /mnt/immich/media/thumbs/* 2>/dev/null || true
-    log "Local media cleanup completed - photos remain safe in Backblaze B2"
+    log "Local media cleanup completed - photos remain safe in S3-compatible storage"
 fi
 
 # ================================================================

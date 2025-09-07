@@ -20,9 +20,9 @@ module "immich" {
   # Required variables
   hcloud_token                    = var.hcloud_token
   ssh_public_keys                = var.ssh_public_keys
-  backblaze_application_key_id   = var.backblaze_application_key_id
-  backblaze_application_key      = var.backblaze_application_key
-  backblaze_bucket_name         = var.backblaze_bucket_name
+  s3_access_key_id               = var.s3_access_key_id
+  s3_secret_access_key           = var.s3_secret_access_key
+  s3_bucket_name                 = var.s3_bucket_name
 
   # Optional customization
   project_name      = var.project_name
@@ -30,5 +30,6 @@ module "immich" {
   domain_name       = var.domain_name
   admin_email       = var.admin_email
   allowed_ssh_ips   = var.allowed_ssh_ips
-  backblaze_region  = var.backblaze_region
+  s3_region         = var.s3_region
+  s3_endpoint       = var.s3_endpoint
 }

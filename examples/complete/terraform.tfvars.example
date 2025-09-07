@@ -20,16 +20,19 @@ ssh_public_keys = [
 ]
 
 # ================================================================
-# REQUIRED: Backblaze B2 Configuration
+# REQUIRED: S3-Compatible Storage Configuration
 # ================================================================
 # 
+# RECOMMENDED: Backblaze B2 for cost-effectiveness (€0.005/GB/month)
 # 1. Create account at https://www.backblaze.com/
 # 2. Create a PRIVATE bucket for your photos
 # 3. Generate Application Key with read/write access to your bucket
+#
+# ALTERNATIVE: Any S3-compatible storage (AWS S3, MinIO, etc.)
 
-backblaze_application_key_id = "YOUR_B2_KEY_ID_HERE"
-backblaze_application_key    = "YOUR_B2_SECRET_KEY_HERE"
-backblaze_bucket_name       = "your-family-photos-2024"
+s3_access_key_id     = "YOUR_S3_ACCESS_KEY_ID_HERE"
+s3_secret_access_key = "YOUR_S3_SECRET_ACCESS_KEY_HERE"
+s3_bucket_name       = "your-family-photos-2024"
 
 # ================================================================
 # OPTIONAL: Customization
@@ -52,5 +55,13 @@ admin_email = "admin@example.com"
 # Find your IP with: curl ifconfig.me
 allowed_ssh_ips = ["0.0.0.0/0"]
 
-# Backblaze region (us-west-000 is cheapest)
-backblaze_region = "us-west-000"
+# S3 region (for Backblaze B2: us-west-000 is cheapest)
+s3_region = "us-west-000"
+
+# S3 endpoint (leave empty for Backblaze B2, or specify custom endpoint)
+# Examples:
+#   Backblaze B2: "" (auto-detected)
+#   AWS S3: "" (auto-detected) 
+#   MinIO: "https://minio.example.com"
+#   Other: "https://s3.custom-provider.com"
+s3_endpoint = ""

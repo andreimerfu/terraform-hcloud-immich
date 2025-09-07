@@ -1,7 +1,11 @@
 # Terraform Module: Immich on Hetzner Cloud
 
-[![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![Hetzner Cloud](https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white)](https://www.hetzner.com/cloud)
+<div align="center">
+  <img src="https://immich.app/img/immich-logo-inline-light.png" alt="Immich" width="300">
+  
+  [![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
+  [![Hetzner Cloud](https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white)](https://www.hetzner.com/cloud)
+</div>
 
 **Cost-effective Immich deployment for families: €8-12/month with unlimited photo storage**
 
@@ -11,7 +15,7 @@ This Terraform module deploys a complete Immich instance on Hetzner Cloud, optim
 
 - **Complete Google Photos alternative** with all features
 - **AI-powered face detection and search**
-- **Unlimited photo storage** via Backblaze B2 + JuiceFS
+- **Unlimited photo storage** via S3-compatible storage + JuiceFS (optimized for Backblaze B2)
 - **Mobile apps** for iOS and Android with auto-backup
 - **Family sharing and albums**
 - **HTTPS with automatic SSL certificates** (with domain)
@@ -23,7 +27,7 @@ This Terraform module deploys a complete Immich instance on Hetzner Cloud, optim
 |-----------|--------------|---------|
 | **CX22 Server** | €5.83 | 2 vCPU, 8GB RAM |
 | **20GB Volume** | €0.96 | System + database + cache |
-| **Backblaze B2** | ~€2.50 | 500GB photos (€0.005/GB) |
+| **S3 Storage** | ~€2.50 | 500GB photos (Backblaze B2: €0.005/GB) |
 | **Total** | **€9.29** | **Complete family solution** |
 
 *Storage scales with usage - first 10GB free*
@@ -38,9 +42,9 @@ module "immich" {
   # Required variables
   hcloud_token                    = var.hcloud_token
   ssh_public_keys                = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI..."]
-  backblaze_application_key_id   = var.backblaze_key_id
-  backblaze_application_key      = var.backblaze_secret_key
-  backblaze_bucket_name         = "my-family-photos-2024"
+  s3_access_key_id               = var.s3_access_key_id
+  s3_secret_access_key           = var.s3_secret_access_key
+  s3_bucket_name                 = "my-family-photos-2024"
 
   # Optional customization
   project_name    = "immich-family"
