@@ -29,11 +29,11 @@ output "admin_credentials" {
 output "cost_breakdown" {
   description = "Monthly cost breakdown in EUR"
   value = {
-    server_cx22       = "€5.83"
-    volume_20gb       = "€0.96" 
-    s3_storage_500gb  = "~€2.50"
-    total_estimated   = "~€9.29"
-    note              = "S3 storage scales with usage (Backblaze B2: €0.005/GB/month recommended)"
+    server_cx22      = "€5.83"
+    volume_20gb      = "€0.96"
+    s3_storage_500gb = "~€2.50"
+    total_estimated  = "~€9.29"
+    note             = "S3 storage scales with usage (Backblaze B2: €0.005/GB/month recommended)"
   }
 }
 
@@ -52,11 +52,11 @@ output "next_steps" {
 output "management_commands" {
   description = "Useful management commands"
   value = {
-    check_status     = "ssh root@${hcloud_server.immich.ipv4_address} 'systemctl status immich'"
-    view_logs        = "ssh root@${hcloud_server.immich.ipv4_address} 'journalctl -u immich -f'"
-    restart_immich   = "ssh root@${hcloud_server.immich.ipv4_address} 'systemctl restart immich'"
-    check_storage    = "ssh root@${hcloud_server.immich.ipv4_address} 'df -h /mnt/immich'"
-    juicefs_status   = "ssh root@${hcloud_server.immich.ipv4_address} 'systemctl status juicefs'"
+    check_status   = "ssh root@${hcloud_server.immich.ipv4_address} 'systemctl status immich'"
+    view_logs      = "ssh root@${hcloud_server.immich.ipv4_address} 'journalctl -u immich -f'"
+    restart_immich = "ssh root@${hcloud_server.immich.ipv4_address} 'systemctl restart immich'"
+    check_storage  = "ssh root@${hcloud_server.immich.ipv4_address} 'df -h /mnt/immich'"
+    juicefs_status = "ssh root@${hcloud_server.immich.ipv4_address} 'systemctl status juicefs'"
   }
 }
 
@@ -64,4 +64,14 @@ output "admin_password" {
   description = "Admin password (use: terraform output -raw admin_password)"
   value       = random_password.admin_password.result
   sensitive   = true
+}
+
+output "network_info" {
+  description = "Network configuration information"
+  value = {
+    using_existing_network = var.use_existing_network
+    network_id             = local.network_id
+    server_private_ip      = local.server_ip
+    network_type           = var.use_existing_network ? "existing" : "created"
+  }
 }

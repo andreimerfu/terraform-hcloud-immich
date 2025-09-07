@@ -65,3 +65,35 @@ s3_region = "us-west-000"
 #   MinIO: "https://minio.example.com"
 #   Other: "https://s3.custom-provider.com"
 s3_endpoint = ""
+
+# ================================================================
+# OPTIONAL: Server and Firewall Configuration
+# ================================================================
+
+# Server type (cx22 recommended for families - 2 vCPU, 8GB RAM)
+# Options: cx11, cx21, cx22, cx31, cx32, cx41, cx42, cx51, cx52
+# Performance tiers: cpx11, cpx21, cpx31, cpx41, cpx51
+server_type = "cx22"
+
+# Firewall access control (SECURITY: Restrict these IPs!)
+# HTTP access (port 80)
+allowed_http_ips = ["0.0.0.0/0", "::/0"]
+
+# HTTPS access (port 443) 
+allowed_https_ips = ["0.0.0.0/0", "::/0"]
+
+# Direct Immich access (port 2283) - consider restricting to your network
+allowed_immich_ips = ["0.0.0.0/0", "::/0"]
+
+# ================================================================
+# OPTIONAL: Resource Labels
+# ================================================================
+
+# Common labels applied to all resources for organization
+resource_labels = {
+  environment = "production"
+  managed_by  = "terraform"
+  component   = "immich"
+  family      = "doe-family"
+  backup      = "daily"
+}

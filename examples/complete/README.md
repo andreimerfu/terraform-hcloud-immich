@@ -51,6 +51,22 @@ This example demonstrates how to deploy a complete Immich family photo server wi
 
 *Storage scales with usage - first 10GB free*
 
+## Configuration Options
+
+### Server Configuration
+- `server_type`: Choose server size (cx11-cx52, cpx11-cpx51)
+- `server_location`: Hetzner datacenter (nbg1, fsn1, hel1, ash, hil)
+
+### Security Configuration
+- `allowed_ssh_ips`: Restrict SSH access to specific IPs
+- `allowed_http_ips`: Control HTTP access (port 80)
+- `allowed_https_ips`: Control HTTPS access (port 443)
+- `allowed_immich_ips`: Control direct Immich access (port 2283)
+
+### Resource Organization
+- `resource_labels`: Apply consistent labels across all resources
+- `project_name`: Customize resource naming prefix
+
 ## Management
 
 ```bash

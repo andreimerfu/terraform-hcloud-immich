@@ -65,7 +65,8 @@ output "admin_password" {
 
 ## Examples
 
-- [Complete deployment](./examples/complete) - Full featured setup with all options
+- [Complete deployment](./examples/complete) - Full featured setup with new network
+- [Existing network](./examples/existing-network) - Using existing Hetzner Cloud network infrastructure
 
 ## Requirements
 
@@ -157,10 +158,41 @@ ssh root@<server-ip> 'systemctl restart immich'
 
 ## 🛠️ Architecture
 
+### Network Configuration Options
+
+The module supports two network deployment modes:
+
+#### 🆕 New Network (Default)
+```hcl
+# Creates new network infrastructure
+# No additional configuration needed
+```
+
+#### 🔗 Existing Network Integration
+```hcl
+module "immich" {
+  source = "your-org/immich-hetzner/hcloud"
+  
+  # Use existing network
+  use_existing_network = true
+  existing_network_id  = "12345"           # Your network ID
+  existing_subnet_id   = "67890"           # Optional: specific subnet
+  server_private_ip    = "10.0.1.100"      # Optional: specific IP
+  
+  # ... other configuration
+}
+```
+
+**Benefits of Existing Network**:
+- 🔗 Integration with existing infrastructure
+- 🛡️ Shared security policies and firewall rules
+- 💰 Cost savings (no additional network charges)
+- 📊 Centralized network management
+
 ### Infrastructure Components
 - **Hetzner Cloud Server**: CX22 (2 vCPU, 8GB RAM)
 - **Volume**: 20GB for system, database, and cache
-- **Network**: Private network with firewall protection
+- **Network**: Private network with firewall protection (supports existing networks)
 - **SSL**: Automatic Let's Encrypt certificates (with domain)
 
 ### Storage Strategy

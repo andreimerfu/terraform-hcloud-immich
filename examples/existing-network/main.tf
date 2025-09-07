@@ -13,7 +13,7 @@ provider "hcloud" {
   token = var.hcloud_token
 }
 
-# Deploy Immich with unlimited photo storage
+# Deploy Immich using existing network infrastructure
 module "immich" {
   source = "../../"
 
@@ -22,6 +22,12 @@ module "immich" {
   s3_access_key_id               = var.s3_access_key_id
   s3_secret_access_key           = var.s3_secret_access_key
   s3_bucket_name                 = var.s3_bucket_name
+
+  # Network configuration - use existing network
+  use_existing_network    = true
+  existing_network_id     = var.existing_network_id
+
+  server_private_ip       = var.server_private_ip
 
   # Optional customization
   project_name      = var.project_name

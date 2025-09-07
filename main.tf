@@ -18,6 +18,21 @@
 
 # No provider configuration in modules - handled by root module
 
+
+
+
+# Locals for network configuration
+locals {
+  # Determine which network to use
+  network_id = var.use_existing_network ? var.existing_network_id : hcloud_network.immich_network[0].id
+
+
+  # Determine server IP configuration
+  server_ip = var.server_private_ip != null ? var.server_private_ip : (
+    var.use_existing_network ? "10.0.1.10" : "10.0.1.10"
+  )
+}
+
 # ================================================================
 # Random password for initial admin user
 # ================================================================
@@ -38,19 +53,30 @@ resource "hcloud_ssh_key" "immich_key" {
 }
 
 # ================================================================
-# Network
+# Network (Conditional Creation)
 # ================================================================
 
+# Create new network only if not using existing network
 resource "hcloud_network" "immich_network" {
+  count = var.use_existing_network ? 0 : 1
+
   name     = "${var.project_name}-network"
-  ip_range = "10.0.0.0/16"
+  ip_range = var.create_new_network_config.network_ip_range
+
+  labels = merge(var.resource_labels, {
+    project = var.project_name
+    purpose = "immich-network"
+  })
 }
 
+# Create new subnet only if not using existing network
 resource "hcloud_network_subnet" "immich_subnet" {
-  network_id   = hcloud_network.immich_network.id
+  count = var.use_existing_network ? 0 : 1
+
+  network_id   = hcloud_network.immich_network[0].id
   type         = "cloud"
-  network_zone = "eu-central"
-  ip_range     = "10.0.1.0/24"
+  network_zone = var.create_new_network_config.network_zone
+  ip_range     = var.create_new_network_config.subnet_ip_range
 }
 
 # ================================================================
@@ -63,10 +89,10 @@ resource "hcloud_volume" "immich_data" {
   location = var.server_location
   format   = "ext4"
 
-  labels = {
+  labels = merge(var.resource_labels, {
     project = var.project_name
     purpose = "immich-data"
-  }
+  })
 }
 
 # ================================================================
@@ -76,19 +102,19 @@ resource "hcloud_volume" "immich_data" {
 resource "hcloud_server" "immich" {
   name        = "${var.project_name}-server"
   image       = "ubuntu-22.04"
-  server_type = "cx22" # 2 vCPU, 8GB RAM - perfect for families
+  server_type = var.server_type # Configurable server type with cx22 default
   location    = var.server_location
   ssh_keys    = hcloud_ssh_key.immich_key[*].id
 
   network {
-    network_id = hcloud_network.immich_network.id
-    ip         = "10.0.1.10"
+    network_id = local.network_id
+    ip         = local.server_ip
   }
 
-  labels = {
+  labels = merge(var.resource_labels, {
     project = var.project_name
     purpose = "immich-server"
-  }
+  })
 
   # Basic setup script
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
@@ -126,7 +152,7 @@ resource "hcloud_firewall" "immich_firewall" {
     direction  = "in"
     port       = "80"
     protocol   = "tcp"
-    source_ips = ["0.0.0.0/0", "::/0"]
+    source_ips = var.allowed_http_ips
   }
 
   # HTTPS
@@ -134,7 +160,7 @@ resource "hcloud_firewall" "immich_firewall" {
     direction  = "in"
     port       = "443"
     protocol   = "tcp"
-    source_ips = ["0.0.0.0/0", "::/0"]
+    source_ips = var.allowed_https_ips
   }
 
   # Immich port
@@ -142,7 +168,7 @@ resource "hcloud_firewall" "immich_firewall" {
     direction  = "in"
     port       = "2283"
     protocol   = "tcp"
-    source_ips = ["0.0.0.0/0", "::/0"]
+    source_ips = var.allowed_immich_ips
   }
 }
 
@@ -180,7 +206,7 @@ resource "null_resource" "immich_setup" {
 
   # Create environment file
   provisioner "file" {
-    content = <<-EOT
+    content     = <<-EOT
       #!/bin/bash
       export PROJECT_NAME='${var.project_name}'
       export DOMAIN_NAME='${var.domain_name}'
