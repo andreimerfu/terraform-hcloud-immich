@@ -163,11 +163,15 @@ variable "server_private_ip" {
 variable "create_new_network_config" {
   description = "Configuration for new network creation (when use_existing_network is false)"
   type = object({
-    network_ip_range = optional(string)
-    subnet_ip_range  = optional(string)
-    network_zone     = optional(string)
+    network_ip_range = string
+    subnet_ip_range  = string
+    network_zone     = string
   })
-  default = {}
+  default = {
+    network_ip_range = "10.0.0.0/16"
+    subnet_ip_range  = "10.0.1.0/24"
+    network_zone     = "eu-central"
+  }
 
   validation {
     condition     = can(cidrhost(var.create_new_network_config.network_ip_range, 0)) && can(cidrhost(var.create_new_network_config.subnet_ip_range, 0))

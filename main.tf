@@ -63,7 +63,7 @@ resource "hcloud_network" "immich_network" {
   count = var.use_existing_network ? 0 : 1
 
   name     = "${var.project_name}-network"
-  ip_range = coalesce(var.create_new_network_config.network_ip_range, "10.0.0.0/16")
+  ip_range = var.create_new_network_config.network_ip_range
 
   labels = merge(var.resource_labels, {
     project = var.project_name
@@ -77,8 +77,8 @@ resource "hcloud_network_subnet" "immich_subnet" {
 
   network_id   = hcloud_network.immich_network[0].id
   type         = "cloud"
-  network_zone = coalesce(var.create_new_network_config.network_zone, "eu-central")
-  ip_range     = coalesce(var.create_new_network_config.subnet_ip_range, "10.0.1.0/24")
+  network_zone = var.create_new_network_config.network_zone
+  ip_range     = var.create_new_network_config.subnet_ip_range
 }
 
 # ================================================================

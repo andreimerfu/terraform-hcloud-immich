@@ -22,6 +22,7 @@ apt-get install -y \
     fail2ban
 
 # Create project directory
+# shellcheck disable=SC2154  # project_name is provided by Terraform templatefile
 mkdir -p /opt/"${project_name}"
 
 # Log setup progress
