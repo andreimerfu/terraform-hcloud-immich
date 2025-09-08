@@ -16,7 +16,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 1. **Fork and clone the repository**
    ```bash
-   git clone https://github.com/your-username/terraform-immich-hetzner.git
+   git clone https://github.com/andreimerfu/terraform-immich-hetzner.git
    cd terraform-immich-hetzner
    ```
 
@@ -29,10 +29,10 @@ Thank you for your interest in contributing! This document provides guidelines f
    ```bash
    # Install terraform-docs
    go install github.com/terraform-docs/terraform-docs@latest
-   
+
    # Install tflint
    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-   
+
    # Install shellcheck (Ubuntu/Debian)
    sudo apt-get install shellcheck
    ```
@@ -76,7 +76,7 @@ variable "server_location" {
   description = "Hetzner Cloud server location"
   type        = string
   default     = "nbg1"
-  
+
   validation {
     condition     = contains(["nbg1", "fsn1", "hel1", "ash", "hil"], var.server_location)
     error_message = "Server location must be one of: nbg1, fsn1, hel1, ash, hil."
@@ -251,8 +251,8 @@ Releases are automated using semantic-release based on conventional commits.
 
 ## 📞 Support
 
-- **General Questions**: Use [GitHub Discussions](https://github.com/your-org/terraform-immich-hetzner/discussions)
-- **Bug Reports**: Create an [issue](https://github.com/your-org/terraform-immich-hetzner/issues)
+- **General Questions**: Use [GitHub Discussions](https://github.com/andreimerfu/terraform-immich-hetzner/discussions)
+- **Bug Reports**: Create an [issue](https://github.com/andreimerfu/terraform-immich-hetzner/issues)
 - **Security Issues**: Email maintainers privately
 - **Community**: Join [Immich Discord](https://discord.gg/immich)
 

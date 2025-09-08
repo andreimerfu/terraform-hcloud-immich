@@ -36,7 +36,7 @@ This Terraform module deploys a complete Immich instance on Hetzner Cloud, optim
 
 ```hcl
 module "immich" {
-  source  = "your-org/immich-hetzner/hcloud"
+  source  = "andreimerfu/terraform-immich-hetzner"
   version = "~> 1.0"
 
   # Required variables
@@ -171,7 +171,7 @@ The module supports two network deployment modes:
 #### 🔗 Existing Network Integration
 ```hcl
 module "immich" {
-  source = "your-org/immich-hetzner/hcloud"
+  source = "andreimerfu/terraform-immich-hetzner"
   
   # Use existing network
   use_existing_network = true
