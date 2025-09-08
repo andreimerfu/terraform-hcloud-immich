@@ -16,8 +16,8 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 1. **Fork and clone the repository**
    ```bash
-   git clone https://github.com/andreimerfu/terraform-immich-hetzner.git
-   cd terraform-immich-hetzner
+   git clone https://github.com/andreimerfu/terraform-hcloud-immich.git
+   cd terraform-hcloud-immich
    ```
 
 2. **Create a feature branch**
@@ -251,8 +251,8 @@ Releases are automated using semantic-release based on conventional commits.
 
 ## 📞 Support
 
-- **General Questions**: Use [GitHub Discussions](https://github.com/andreimerfu/terraform-immich-hetzner/discussions)
-- **Bug Reports**: Create an [issue](https://github.com/andreimerfu/terraform-immich-hetzner/issues)
+- **General Questions**: Use [GitHub Discussions](https://github.com/andreimerfu/terraform-hcloud-immich/discussions)
+- **Bug Reports**: Create an [issue](https://github.com/andreimerfu/terraform-hcloud-immich/issues)
 - **Security Issues**: Email maintainers privately
 - **Community**: Join [Immich Discord](https://discord.gg/immich)
 

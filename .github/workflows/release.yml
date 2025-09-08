@@ -79,19 +79,19 @@ jobs:
 
       - name: Create Release Archive
         run: |
-          git archive --format=tar.gz --prefix=terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}/ \
-            ${{ steps.get_tag.outputs.tag }} > terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}.tar.gz
+          git archive --format=tar.gz --prefix=terraform-hcloud-immich-${{ steps.get_tag.outputs.version }}/ \
+            ${{ steps.get_tag.outputs.tag }} > terraform-hcloud-immich-${{ steps.get_tag.outputs.version }}.tar.gz
 
       - name: Generate checksums
         run: |
-          sha256sum terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}.tar.gz > checksums.txt
+          sha256sum terraform-hcloud-immich-${{ steps.get_tag.outputs.version }}.tar.gz > checksums.txt
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get_tag.outputs.tag }}
           files: |
-            terraform-immich-hetzner-${{ steps.get_tag.outputs.version }}.tar.gz
+            terraform-hcloud-immich-${{ steps.get_tag.outputs.version }}.tar.gz
             checksums.txt
           generate_release_notes: true
         env:

@@ -2,7 +2,10 @@
 
 <div align="center">
   <img src="https://immich.app/img/immich-logo-inline-light.png" alt="Immich" width="300">
-  
+
+  [![Terraform Registry](https://img.shields.io/badge/terraform-registry-623CE4?style=for-the-badge&logo=terraform&logoColor=white)](https://registry.terraform.io/modules/andreimerfu/hcloud-immich/hcloud)
+  [![GitHub release](https://img.shields.io/github/v/release/andreimerfu/terraform-hcloud-immich?style=for-the-badge&logo=github)](https://github.com/andreimerfu/terraform-hcloud-immich/releases)
+  [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/andreimerfu/terraform-hcloud-immich/ci.yml?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/andreimerfu/terraform-hcloud-immich/actions)
   [![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
   [![Hetzner Cloud](https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white)](https://www.hetzner.com/cloud)
 </div>
@@ -35,8 +38,8 @@ This Terraform module deploys a complete Immich instance on Hetzner Cloud, optim
 ## Usage
 
 ```hcl
-module "immich" {
-  source  = "andreimerfu/terraform-immich-hetzner"
+module "immich-hetzner" {
+  source  = "andreimerfu/hcloud-immich/hcloud"
   version = "~> 1.0"
 
   # Required variables
@@ -170,15 +173,15 @@ The module supports two network deployment modes:
 
 #### 🔗 Existing Network Integration
 ```hcl
-module "immich" {
-  source = "andreimerfu/terraform-immich-hetzner"
-  
+module "immich-hetzner" {
+  source = "andreimerfu/hcloud-immich/hcloud"
+
   # Use existing network
   use_existing_network = true
   existing_network_id  = "12345"           # Your network ID
   existing_subnet_id   = "67890"           # Optional: specific subnet
   server_private_ip    = "10.0.1.100"      # Optional: specific IP
-  
+
   # ... other configuration
 }
 ```
@@ -210,7 +213,7 @@ module "immich" {
 ## 🔒 Security Features
 
 - **Firewall protection** (Hetzner Cloud + UFW)
-- **Fail2ban** brute-force protection  
+- **Fail2ban** brute-force protection
 - **SSH key authentication** only
 - **HTTPS with Let's Encrypt** (with domain)
 - **Automatic security updates**

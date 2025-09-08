@@ -36,8 +36,8 @@ Ensure your existing network allows these ports:
 ### Example Configuration
 
 ```hcl
-module "immich" {
-  source = "andreimerfu/terraform-immich-hetzner"
+module "immich-hetzner" {
+  source = "andreimerfu/hcloud-immich/hcloud"
   
   # Standard configuration
   hcloud_token         = var.hcloud_token

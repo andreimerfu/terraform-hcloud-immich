@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: 🤔 General Questions
-    url: https://github.com/andreimerfu/terraform-immich-hetzner/discussions
+    url: https://github.com/andreimerfu/terraform-hcloud-immich/discussions
     about: Ask questions or discuss the module in GitHub Discussions
   - name: 💬 Community Support
     url: https://discord.gg/immich

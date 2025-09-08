@@ -1,10 +1,10 @@
 {
-  "name": "terraform-immich-hetzner",
+  "name": "terraform-hcloud-immich",
   "version": "0.0.0-development",
   "description": "Terraform module for cost-effective Immich deployment on Hetzner Cloud with unlimited photo storage via Backblaze B2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andreimerfu/terraform-immich-hetzner.git"
+    "url": "https://github.com/andreimerfu/terraform-hcloud-immich.git"
   },
   "keywords": [
     "terraform",
@@ -20,9 +20,9 @@
   "author": "andreimerfu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andreimerfu/terraform-immich-hetzner/issues"
+    "url": "https://github.com/andreimerfu/terraform-hcloud-immich/issues"
   },
-  "homepage": "https://github.com/andreimerfu/terraform-immich-hetzner#readme",
+  "homepage": "https://github.com/andreimerfu/terraform-hcloud-immich#readme",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
