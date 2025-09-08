@@ -1,3 +1,19 @@
+## 1.0.0 (2025-09-08)
+
+### ⚠ BREAKING CHANGES
+
+* Module source path changed to andreimerfu/hcloud-immich/hcloud
+
+### Features
+
+* update repository name to terraform-hcloud-immich for proper HashiCorp Registry ([2f20236](https://github.com/andreimerfu/terraform-hcloud-immich/commit/2f20236f7828afebd3a9b069be5639ccae64ba40))
+
+### Bug Fixes
+
+* add proper GitHub Actions permissions for semantic-release ([e603eed](https://github.com/andreimerfu/terraform-hcloud-immich/commit/e603eedb8cd1cb721eb19a0c873abb6af1a45eb7))
+* configure semantic-release for registry publication ([fe680a8](https://github.com/andreimerfu/terraform-hcloud-immich/commit/fe680a88f0ea1cd4adc911f197819ef5df486fb3))
+* resolve CI failures by adding missing existing_subnet_id variable and fixing formatting ([881bc97](https://github.com/andreimerfu/terraform-hcloud-immich/commit/881bc9781a90ac2bf7add478558bfd97f386473f))
+
 ## [2.0.0](https://github.com/andreimerfu/terraform-hcloud-immich/compare/v1.0.0...v2.0.0) (2025-09-08)
 
 ### ⚠ BREAKING CHANGES
