@@ -137,7 +137,7 @@ variable "existing_network_id" {
 
   validation {
     condition     = var.existing_network_id == null || (var.existing_network_id != null && var.existing_network_id != "")
-    error_message = "existing_network_id must be a non-empty string when provided."
+    error_message = "The existing_network_id must be a non-empty string when provided."
   }
 }
 
@@ -156,16 +156,16 @@ variable "server_private_ip" {
 
   validation {
     condition     = var.server_private_ip == null || can(cidrhost("0.0.0.0/0", 0))
-    error_message = "server_private_ip must be a valid IP address."
+    error_message = "The server_private_ip must be a valid IP address."
   }
 }
 
 variable "create_new_network_config" {
   description = "Configuration for new network creation (when use_existing_network is false)"
   type = object({
-    network_ip_range = optional(string, "10.0.0.0/16")
-    subnet_ip_range  = optional(string, "10.0.1.0/24")
-    network_zone     = optional(string, "eu-central")
+    network_ip_range = optional(string)
+    subnet_ip_range  = optional(string)
+    network_zone     = optional(string)
   })
   default = {}
 

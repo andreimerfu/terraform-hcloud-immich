@@ -102,7 +102,7 @@ jobs:
 
       - name: Upload Trivy scan results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: false  # Disabled - GitHub Code Scanning not enabled on repository
         with:
           sarif_file: 'trivy-results.sarif'
 
@@ -117,7 +117,7 @@ jobs:
 
       - name: Upload Checkov scan results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: false  # Disabled - GitHub Code Scanning not enabled on repository
         with:
           sarif_file: checkov-results.sarif
 

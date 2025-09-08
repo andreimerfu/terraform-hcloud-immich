@@ -2,6 +2,8 @@
 # ================================================================
 # Initial User Data Script
 # ================================================================
+# Variables injected by Terraform templatefile function:
+# - project_name: Name of the project for directory creation
 
 set -e
 
