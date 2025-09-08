@@ -18,6 +18,12 @@
 
 # No provider configuration in modules - handled by root module
 
+# Validate existing network when specified
+data "hcloud_network" "existing" {
+  count = var.use_existing_network ? 1 : 0
+  id    = var.existing_network_id
+}
+
 
 
 

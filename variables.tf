@@ -141,6 +141,12 @@ variable "existing_network_id" {
   }
 }
 
+variable "existing_subnet_id" {
+  description = "ID of existing subnet within the network (optional - will use first subnet if not specified)"
+  type        = string
+  default     = null
+}
+
 
 
 variable "server_private_ip" {
