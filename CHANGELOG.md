@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/andreimerfu/terraform-hcloud-immich/compare/v1.0.0...v1.0.1) (2025-09-08)
+
+### Bug Fixes
+
+* the readme badges ([ec2b187](https://github.com/andreimerfu/terraform-hcloud-immich/commit/ec2b1878b546b0cfb4b2331ebe6c2bd678560276))
+
 ## 1.0.0 (2025-09-08)
 
 ### ⚠ BREAKING CHANGES
