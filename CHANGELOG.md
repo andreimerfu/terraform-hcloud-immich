@@ -1,3 +1,13 @@
+## [2.0.0](https://github.com/andreimerfu/terraform-hcloud-immich/compare/v1.0.0...v2.0.0) (2025-09-08)
+
+### ⚠ BREAKING CHANGES
+
+* Module source path changed to andreimerfu/hcloud-immich/hcloud
+
+### Features
+
+* update repository name to terraform-hcloud-immich for proper HashiCorp Registry ([2f20236](https://github.com/andreimerfu/terraform-hcloud-immich/commit/2f20236f7828afebd3a9b069be5639ccae64ba40))
+
 ## 1.0.0 (2025-09-08)
 
 ### Bug Fixes
