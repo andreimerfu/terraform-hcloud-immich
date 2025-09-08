@@ -20,7 +20,7 @@ apt-get install -y \
     fail2ban
 
 # Create project directory
-mkdir -p /opt/${project_name}
+mkdir -p /opt/"${project_name}"
 
 # Log setup progress
 echo "$(date): Initial setup completed" >> /var/log/immich-setup.log

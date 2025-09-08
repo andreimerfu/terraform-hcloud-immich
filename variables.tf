@@ -136,8 +136,8 @@ variable "existing_network_id" {
   default     = null
 
   validation {
-    condition     = var.use_existing_network == false || (var.use_existing_network == true && var.existing_network_id != null && var.existing_network_id != "")
-    error_message = "existing_network_id is required when use_existing_network is true."
+    condition     = var.existing_network_id == null || (var.existing_network_id != null && var.existing_network_id != "")
+    error_message = "existing_network_id must be a non-empty string when provided."
   }
 }
 

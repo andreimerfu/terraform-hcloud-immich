@@ -3,6 +3,8 @@
 # JuiceFS Integration Validation Script
 # ================================================================
 
+set -e
+
 echo "🧪 Validating JuiceFS Integration in Terraform Setup"
 echo "======================================================"
 
