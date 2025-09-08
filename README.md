@@ -2,6 +2,8 @@
 
 <div align="center">
   <img src="https://immich.app/img/immich-logo-inline-light.png" alt="Immich" width="300">
+  
+  <br><br>
 
   [![Terraform Registry](https://img.shields.io/badge/terraform-registry-623CE4?style=for-the-badge&logo=terraform&logoColor=white)](https://registry.terraform.io/modules/andreimerfu/hcloud-immich/hcloud)
   [![GitHub release](https://img.shields.io/github/v/release/andreimerfu/terraform-hcloud-immich?style=for-the-badge&logo=github)](https://github.com/andreimerfu/terraform-hcloud-immich/releases)
