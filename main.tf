@@ -3,13 +3,13 @@
 # ================================================================
 #
 # Ultra cost-effective Immich deployment for families
-# Estimated cost: €8-12/month with unlimited photo storage
+# Estimated cost: €7-10/month with unlimited photo storage
 #
 # Components:
-# - CX21 server (€5.83/month) - 2 vCPU, 8GB RAM
-# - 50GB volume (€2.40/month) - System + database + cache
-# - Backblaze B2 (€2.50/month) - 500GB photo storage via JuiceFS
-# - Total: ~€10.73/month
+# - CX22 server (€3.79/month) - 2 vCPU, 4GB RAM
+# - 20GB volume (€0.88/month) - System + database + cache
+# - Backblaze B2 (€2.75/month) - 500GB photo storage via JuiceFS
+# - Total: ~€7.42/month
 # ================================================================
 
 # ================================================================
@@ -18,11 +18,7 @@
 
 # No provider configuration in modules - handled by root module
 
-# Validate existing network when specified
-data "hcloud_network" "existing" {
-  count = var.use_existing_network ? 1 : 0
-  id    = var.existing_network_id
-}
+# Note: existing_subnet_id parameter is available for future subnet selection logic
 
 
 

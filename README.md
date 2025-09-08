@@ -7,7 +7,7 @@
   [![Hetzner Cloud](https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white)](https://www.hetzner.com/cloud)
 </div>
 
-**Cost-effective Immich deployment for families: €8-12/month with unlimited photo storage**
+**Cost-effective Immich deployment for families: €7-10/month with unlimited photo storage**
 
 This Terraform module deploys a complete Immich instance on Hetzner Cloud, optimized for family use with minimal operational costs. Features unlimited photo storage via Backblaze B2 integration.
 
@@ -25,10 +25,10 @@ This Terraform module deploys a complete Immich instance on Hetzner Cloud, optim
 
 | Component | Monthly Cost | Details |
 |-----------|--------------|---------|
-| **CX22 Server** | €5.83 | 2 vCPU, 8GB RAM |
-| **20GB Volume** | €0.96 | System + database + cache |
-| **S3 Storage** | ~€2.50 | 500GB photos (Backblaze B2: €0.005/GB) |
-| **Total** | **€9.29** | **Complete family solution** |
+| **CX22 Server** | €3.79 | 2 vCPU, 4GB RAM |
+| **20GB Volume** | €0.88 | System + database + cache |
+| **S3 Storage** | ~€2.75 | 500GB photos (Backblaze B2: €0.0055/GB) |
+| **Total** | **€7.42** | **Complete family solution** |
 
 *Storage scales with usage - first 10GB free*
 

@@ -29,11 +29,11 @@ output "admin_credentials" {
 output "cost_breakdown" {
   description = "Monthly cost breakdown in EUR"
   value = {
-    server_cx22      = "€5.83"
-    volume_20gb      = "€0.96"
-    s3_storage_500gb = "~€2.50"
-    total_estimated  = "~€9.29"
-    note             = "S3 storage scales with usage (Backblaze B2: €0.005/GB/month recommended)"
+    server_cx22      = "€3.79"
+    volume_20gb      = "€0.88"
+    s3_storage_500gb = "~€2.75"
+    total_estimated  = "~€7.42"
+    note             = "S3 storage scales with usage (Backblaze B2: €0.0055/GB/month recommended)"
   }
 }
 
@@ -71,6 +71,7 @@ output "network_info" {
   value = {
     using_existing_network = var.use_existing_network
     network_id             = local.network_id
+    existing_subnet_id     = var.existing_subnet_id
     server_private_ip      = local.server_ip
     network_type           = var.use_existing_network ? "existing" : "created"
   }
