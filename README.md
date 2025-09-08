@@ -1,15 +1,24 @@
 # Terraform Module: Immich on Hetzner Cloud
 
 <div align="center">
-  <img src="https://immich.app/img/immich-logo-inline-light.png" alt="Immich" width="300">
-  
   <br><br>
-
-  [![Terraform Registry](https://img.shields.io/badge/terraform-registry-623CE4?style=for-the-badge&logo=terraform&logoColor=white)](https://registry.terraform.io/modules/andreimerfu/hcloud-immich/hcloud)
-  [![GitHub release](https://img.shields.io/github/v/release/andreimerfu/terraform-hcloud-immich?style=for-the-badge&logo=github)](https://github.com/andreimerfu/terraform-hcloud-immich/releases)
-  [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/andreimerfu/terraform-hcloud-immich/ci.yml?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/andreimerfu/terraform-hcloud-immich/actions)
-  [![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-  [![Hetzner Cloud](https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white)](https://www.hetzner.com/cloud)
+  <img src="https://immich.app/img/immich-logo-inline-light.png" alt="Immich" width="300">
+  <br><br>
+  <a href="https://registry.terraform.io/modules/andreimerfu/immich/hcloud/latest">
+    <img src="https://img.shields.io/badge/terraform-registry-623CE4?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform Registry">
+  </a>
+  <a href="https://github.com/andreimerfu/terraform-hcloud-immich/releases">
+    <img src="https://img.shields.io/github/v/release/andreimerfu/terraform-hcloud-immich?style=for-the-badge&logo=github" alt="GitHub release">
+  </a>
+  <a href="https://github.com/andreimerfu/terraform-hcloud-immich/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/andreimerfu/terraform-hcloud-immich/ci.yml?style=for-the-badge&logo=github-actions&logoColor=white" alt="GitHub Workflow Status">
+  </a>
+  <a href="https://www.terraform.io/">
+    <img src="https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform">
+  </a>
+  <a href="https://www.hetzner.com/cloud">
+    <img src="https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white" alt="Hetzner Cloud">
+  </a>
 </div>
 
 **Cost-effective Immich deployment for families: €7-10/month with unlimited photo storage**
