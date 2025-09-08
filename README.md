@@ -20,7 +20,7 @@
     <img src="https://img.shields.io/badge/hetzner-%23d50c2d.svg?style=for-the-badge&logo=hetzner&logoColor=white" alt="Hetzner Cloud">
   </a>
 </div>
-
+ 
 **Cost-effective Immich deployment for families: €7-10/month with unlimited photo storage**
 
 This Terraform module deploys a complete Immich instance on Hetzner Cloud, optimized for family use with minimal operational costs. Features unlimited photo storage via Backblaze B2 integration.
