@@ -1,3 +1,11 @@
+## 1.0.0 (2025-09-08)
+
+### Bug Fixes
+
+* add proper GitHub Actions permissions for semantic-release ([e603eed](https://github.com/andreimerfu/terraform-immich-hetzner/commit/e603eedb8cd1cb721eb19a0c873abb6af1a45eb7))
+* configure semantic-release for registry publication ([fe680a8](https://github.com/andreimerfu/terraform-immich-hetzner/commit/fe680a88f0ea1cd4adc911f197819ef5df486fb3))
+* resolve CI failures by adding missing existing_subnet_id variable and fixing formatting ([881bc97](https://github.com/andreimerfu/terraform-immich-hetzner/commit/881bc9781a90ac2bf7add478558bfd97f386473f))
+
 # Changelog
 
 All notable changes to this Terraform module will be documented in this file.
